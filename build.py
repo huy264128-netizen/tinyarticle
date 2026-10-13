@@ -1,6 +1,22 @@
 #!/usr/bin/env python3
+import subprocess
+import sys
 from pathlib import Path
-import os
+
+ROOT = Path(__file__).resolve().parent
+
+subprocess.check_call(
+    [
+        sys.executable,
+        "-m",
+        "pip",
+        "install",
+        "-r",
+        str(ROOT / "requirements.txt"),
+    ]
+)
+
+# 后续执行构建逻辑
 import markdown
 
 
@@ -8,7 +24,13 @@ def convert(file: Path):
     source = file.read_text(encoding="UTF-8")
     output = file.with_suffix(".html")
     title = file.name
-    content = markdown.markdown(source,extensions=["extra","toc",])
+    content = markdown.markdown(
+        source,
+        extensions=[
+            "extra",
+            "toc",
+        ],
+    )
     html = f"""<!DOCTYPE html>
     <html lang="zh-CN">
     <link rel="stylesheet"
@@ -30,8 +52,12 @@ def convert(file: Path):
     </body>
     </html>
     """
-    output.write_text(html,encoding="UTF-8")
+    output.write_text(html, encoding="UTF-8")
+
+
 def main():
     for file in Path(".").rglob("*.md"):
         convert(file)
+
+
 main()
