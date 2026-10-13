@@ -55,7 +55,7 @@ def convert(file: Path):
     </body>
     </html>
     """
-    print(f"Successfully Converted {filename} to {output}")
+    print(f"Successfully Converted {file} to {output}")
     output.write_text(html, encoding="UTF-8")
 
 
