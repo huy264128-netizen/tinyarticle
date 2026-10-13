@@ -1,22 +1,25 @@
 #!/usr/bin/env python3
+from fileinput import filename
 import subprocess
 import sys
 from pathlib import Path
+try:
+    ROOT = Path(__file__).resolve().parent
 
-ROOT = Path(__file__).resolve().parent
+    subprocess.check_call(
+        [
+            sys.executable,
+            "-m",
+            "pip",
+            "install",
+            "-r",
+            str(ROOT / "requirements.txt"),
+        ]
+    )
 
-subprocess.check_call(
-    [
-        sys.executable,
-        "-m",
-        "pip",
-        "install",
-        "-r",
-        str(ROOT / "requirements.txt"),
-    ]
-)
-
-# 后续执行构建逻辑
+    # 后续执行构建逻辑
+except Exception:
+    pass
 import markdown
 
 
@@ -52,6 +55,7 @@ def convert(file: Path):
     </body>
     </html>
     """
+    print(f"Successfully Converted {filename} to {output}")
     output.write_text(html, encoding="UTF-8")
 
 
